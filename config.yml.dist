@@ -1,0 +1,10 @@
+wifi:
+    # wifi settings
+    setup: false  # set to true if you want to use these settings
+    ssid: YOUR_WIFI_SSID
+    passphrase: YOUR_WIFI_PASSPHRASE
+
+
+OTA:
+  # Choose a password for over the air uploads
+  password: CHANGEME_OTA_PASSWORD
