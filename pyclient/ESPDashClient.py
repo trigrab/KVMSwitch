@@ -4,35 +4,34 @@ import asyncio
 import argparse
 import json
 import websockets
+from config import config
 
-
-class KVMSwitchWSClient:
+class ESPDashClient:
     cards = []
-    name = "Laptop"
-    uri = "ws://192.168.42.90:80/dashws"
+    uri = "ws://{hostname}:80/dashws"
 
     def main(self):
-        answer = asyncio.get_event_loop().run_until_complete(self.hello())
+        self.uri = self.uri.format(hostname=config.hostname)
+        answer = asyncio.get_event_loop().run_until_complete(self.get_layout())
         self.parse_answer(answer)
-        print(self.name)
         card = self.find_card(self.name)
         if card is not None:
-            asyncio.get_event_loop().run_until_complete(
-                self.post({"command": "buttonClicked",
+            message = {"command": "buttonClicked",
                            "id": str(card["id"]),
-                           "value": bool(card["value"])}))
+                           "value": bool(card["value"])} 
+            asyncio.get_event_loop().run_until_complete(self.post(message))
+            print(f"message sent: {message}")
 
     def find_card(self, name):
         for card in self.cards:
             if name.lower() in card["name"].lower():
                 return card
 
-    async def hello(self):
+    async def get_layout(self):
         async with websockets.connect(self.uri) as websocket:
             message = {"command": "getLayout"}
 
             await websocket.send(json.dumps(message))
-            print(f"> {message}")
 
             answer = await websocket.recv()
             return json.loads(answer)
@@ -50,10 +49,9 @@ class KVMSwitchWSClient:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("card", help="name of the card you want to click (partial suffices)",
-                        nargs='?', default="Laptop")
+    parser.add_argument("card", help="name of the card you want to click (partial suffices)")
     args = parser.parse_args()
 
-    kvm = KVMSwitchWSClient()
+    kvm = ESPDashClient()
     kvm.name = args.card
     kvm.main()
