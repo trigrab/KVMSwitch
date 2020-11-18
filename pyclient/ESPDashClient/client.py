@@ -5,7 +5,7 @@ import argparse
 import json
 import re
 import websockets
-from config import Config
+from ESPDashClient.config import Config
 
 
 class ESPDashClient:
@@ -67,12 +67,17 @@ class ESPDashClient:
             print(json.dumps(answer, indent=2))
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("card", help="name of the card you want to click (partial suffices)",
                         nargs="?")
     args = parser.parse_args()
-
     dash_client = ESPDashClient()
     dash_client.get_layout()
     dash_client.click_card(args.card)
+
+
+if __name__ == '__main__':
+    main()
+
+

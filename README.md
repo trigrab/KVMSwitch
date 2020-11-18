@@ -25,3 +25,8 @@ If you do not want to configure anything, just copy `config.yml.dist` to
 The project runs a web server on the esp which can be uses with any browser.
 If you want to have some more advanced setup, see /pyclient for a python
 client using websockets.
+
+Install it using pip:
+```bash
+pip install git+https://github.com/trigrab/KVMSwitch@master#egg=espclient&subdirectory=pyclient
+```
