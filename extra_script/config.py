@@ -8,14 +8,42 @@ config_file = "config.yml"
 
 extra_config = {
     "wifi": {
-        "file_path": os.path.join("src", "wifi.cpp"),
-        "line_handle": "WiFi.begin",
-        "line_f_string": "    WiFi.begin(\"{wifi_ssid}\", \"{wifi_pass}\");\n",
+        "replacements": [
+            {
+                "file_path": os.path.join("src", "wifi.cpp"),
+                "line_handle": "WiFi.begin",
+                "variables": ["ssid", "passphrase"],
+                "line_f_string": "    WiFi.begin(\"{ssid}\", \"{passphrase}\");\n",
+            },
+        ]
     },
     "OTA": {
-        "file_path": os.path.join("src", "ota.cpp"),
-        "line_handle": "ArduinoOTA.setPassword",
-        "line_f_string": "    ArduinoOTA.setPassword(\"{ota_password}\");\n",
+        "replacements": [
+            {
+                "file_path": os.path.join("src", "ota.cpp"),
+                "line_handle": "ArduinoOTA.setPort",
+                "variables": ["port"],
+                "line_f_string": "    ArduinoOTA.setPort({port});\n",
+            },
+            {
+                "file_path": os.path.join("src", "ota.cpp"),
+                "line_handle": "ArduinoOTA.setHostname",
+                "variables": ["hostname"],
+                "line_f_string": "    ArduinoOTA.setHostname(\"{hostname}\");\n",
+            },
+            {
+                "file_path": os.path.join("src", "ota.cpp"),
+                "line_handle": "ArduinoOTA.setPassword",
+                "variables": ["password"],
+                "line_f_string": "    ArduinoOTA.setPassword(\"{password}\");\n",
+             },
+            {
+                "file_path": os.path.join("src", "ota.cpp"),
+                "line_handle": "ArduinoOTA.handle",
+                "variables": [],
+                "line_f_string": "    ArduinoOTA.handle();\n",
+             },
+        ]
     },
 }
 tmp_suffix = ".tmp"
@@ -31,7 +59,8 @@ def get_config():
             file_contents = "\n".join(file.readlines())
         config: dict = yaml.load(file_contents, Loader=yaml.Loader)
         for key, section in config.items():
-            section.update(extra_config[key])
+            if key in extra_config:
+                section.update(extra_config[key])
         return config
     else:
         logger.error("Config file does not exist. See README.md")

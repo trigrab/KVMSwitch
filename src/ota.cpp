@@ -9,14 +9,10 @@ void ota_setup() {
     // ArduinoOTA.setPort(8266);
 
     // Hostname defaults to esp8266-[ChipID]
-    ArduinoOTA.setHostname("KVMSwitch");
+    // ArduinoOTA.setHostname("kvmswitch");
 
     // This line is automatically replaced on build time. Do not change! See README.md and config.yml
-    // ArduinoOTA.setPassword("CHANGE_ME_OTA_PASSWORD");
-
-    // Password can be set with it's md5 value as well
-    // MD5(admin) = 21232f297a57a5a743894a0e4a801fc3
-    // ArduinoOTA.setPasswordHash("21232f297a57a5a743894a0e4a801fc3");
+    // ArduinoOTA.setPassword("CHANGEME_OTA_PASSWORD");
 
     ArduinoOTA.onStart([]() {
         String type;
@@ -53,5 +49,5 @@ void ota_setup() {
 }
 
 void ota_loop() {
-    ArduinoOTA.handle();
+    // ArduinoOTA.handle();
 }

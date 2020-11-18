@@ -7,4 +7,12 @@ wifi:
 
 OTA:
   # Choose a password for over the air uploads
+  setup: false
+  use: false  # set this to true if you want to upload via ota instead of serial
+  port: 8266
+  hostname: kvmswitch
+  ip_address: 192.168.0.100
   password: CHANGEME_OTA_PASSWORD
+
+serial:
+  port: /dev/ttyUSB0
