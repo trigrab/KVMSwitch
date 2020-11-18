@@ -1,17 +1,23 @@
 import yaml
 
-class config_meta(type):
+
+class ConfigMeta(type):
     def __init__(cls, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         cls._config_file = "config.yml"
 
     @property
     def hostname(cls):
         return cls._get_config_by_key("hostname")
 
+    @property
+    def port(cls):
+        return cls._get_config_by_key("port")
+
     def _get_config_by_key(cls, key: str):
-        config = cls._get_config()
-        if key in config:
-            return config[key] 
+        c = cls._get_config()
+        if key in c:
+            return c[key]
 
     def _get_config(cls):
         with open(cls._config_file, "r") as file:
@@ -19,6 +25,6 @@ class config_meta(type):
             return yaml.load(content, Loader=yaml.Loader)
 
 
-class config(metaclass=config_meta):
+class Config(metaclass=ConfigMeta):
     pass
 
